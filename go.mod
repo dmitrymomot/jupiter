@@ -1,6 +1,6 @@
 module github.com/dmitrymomot/jupiter
 
-go 1.20
+go 1.19
 
 require (
 	github.com/google/go-querystring v1.1.0
