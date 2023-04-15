@@ -86,8 +86,32 @@ func (q QuoteResponse) GetBestRoute() (Route, error) {
 
 	bestRoute := q[0]
 	for _, route := range q {
-		if route.PriceImpactPct < bestRoute.PriceImpactPct {
-			bestRoute = route
+		if route.SwapMode == SwapModeExactIn {
+			amount, err := strconv.ParseFloat(route.OutAmount, 64)
+			if err != nil {
+				return Route{}, err
+			}
+			bestAmount, err := strconv.ParseFloat(bestRoute.OutAmount, 64)
+			if err != nil {
+				return Route{}, err
+			}
+			if amount > bestAmount {
+				bestRoute = route
+			}
+			continue
+		} else {
+			amount, err := strconv.ParseFloat(route.InAmount, 64)
+			if err != nil {
+				return Route{}, err
+			}
+			bestAmount, err := strconv.ParseFloat(bestRoute.InAmount, 64)
+			if err != nil {
+				return Route{}, err
+			}
+			if amount > bestAmount {
+				bestRoute = route
+			}
+			continue
 		}
 	}
 	return bestRoute, nil

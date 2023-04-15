@@ -113,3 +113,19 @@ func TestExchangeRate(t *testing.T) {
 	assert.Equal(t, usdcMint, exchangeRate.OutputMint)
 	assert.EqualValues(t, amount, exchangeRate.OutAmount)
 }
+
+func TestBestSwap(t *testing.T) {
+	c := jupiter.NewClient()
+
+	var amount uint64 = 100000
+	bestSwap, err := c.BestSwap(jupiter.BestSwapParams{
+		UserPublicKey: "8HwPMNxtFDrvxXn1fJsAYB258TnA6Ydr1DWCtVYgRW4W",
+		InputMint:     wSolMint,
+		OutputMint:    usdcMint,
+		Amount:        amount,
+		SwapMode:      jupiter.SwapModeExactIn,
+	})
+	require.NoError(t, err)
+	require.NotEmpty(t, bestSwap)
+	utils.PrettyPrint(bestSwap)
+}
